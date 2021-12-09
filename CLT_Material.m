@@ -24,6 +24,8 @@ classdef CLT_Material < handle
         F22(1,1)
         F12(1,1)
         F66(1,1)
+        
+        Verbose(1,1) logical = false
     end
     
     
@@ -37,6 +39,7 @@ classdef CLT_Material < handle
             addOptional(p,'G12',0.15, @(x) x > 0);
             addOptional(p,'v12',@(x) (x > 0 && x < 0.5));
             addOptional(p,'Name','Mat', @(x) ischar(x));
+            addOptional(p,'Verbose',false, @(x) islogical(x));
        
             parse(p,varargin{:});
             
@@ -45,6 +48,7 @@ classdef CLT_Material < handle
             obj.G12         =   p.Results.G12;
             obj.v12         =   p.Results.v12;
             obj.Name        =   p.Results.Name;
+            obj.Verbose     =   p.Results.Verbose;
             
             if nargin == 10
                 obj.calculateS();

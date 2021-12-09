@@ -19,9 +19,16 @@ classdef CLT_Laminate < handle
         d (3,3) double = zeros(3,3)
     end
     
+    properties(Hidden)
+        LengthDisplayOutput(1,1) uint16 = 70
+        Verbose(1,1) logical = false
+        
+    end
     
     methods
         function obj = CLT_Laminate(varargin)
+            
+            obj.LicenseMessage();
             
             if nargin == 0; return; end
             
@@ -34,6 +41,7 @@ classdef CLT_Laminate < handle
             addOptional(p,'Symmetric',false,@(x) islogical(x));
             addOptional(p,'RepeatLeft',1, @(x) x > 0);
             addOptional(p,'RepeatRight',1, @(x) x > 0);
+            addOptional(p,'Verbose',false,@(x) islogical(x));
             
             parse(p,varargin{:});
             
@@ -43,6 +51,7 @@ classdef CLT_Laminate < handle
             obj.Symmetric    	=   p.Results.Symmetric;
             obj.RepeatLeft    	=   p.Results.RepeatLeft;
             obj.RepeatRight    	=   p.Results.RepeatRight;
+            obj.Verbose       	=   p.Results.Verbose;
             
             if obj.Symmetric
                 obj.NumberOfPlies   =   (length(obj.Stack) * obj.RepeatLeft) * 2 * obj.RepeatRight;
@@ -130,7 +139,12 @@ classdef CLT_Laminate < handle
             obj.abd     =   [obj.a, obj.b; obj.b, obj.d];
         end
         
-        function PFA(obj,varargin)
+        function ProgressiveFailureAnalysis(obj,varargin)
+            
+            if obj.Verbose
+                obj.printLineText('Progressive Failure Analysis');
+            end
+            
             p               =   inputParser;
 %             p.KeepUnmatched =   true;
             
@@ -140,7 +154,8 @@ classdef CLT_Laminate < handle
             addOptional(p,'Mx',0, @isnumeric);
             addOptional(p,'My',0, @isnumeric);
             addOptional(p,'Mxy',0, @isnumeric);
-       
+            addOptional(p,'Verbose',false, @islogical);
+            
             parse(p,varargin{2:end});
             
             Nx       	=   p.Results.Nx;
@@ -149,6 +164,7 @@ classdef CLT_Laminate < handle
             Mx       	=   p.Results.Mx;
             My          =   p.Results.My;
             Mxy        	=   p.Results.Mxy;
+            verbose     =   p.Results.Verbose;
             
             MCD         =   max(abs([Nx,Ny,Nxy,Mx,My,Mxy]));
             Nxold       =   Nx;
@@ -179,8 +195,10 @@ classdef CLT_Laminate < handle
                     TW  =   obj.Material(i).calculateTW(obj.Plies(i).S12);
                     if TW > 1 && ~obj.Plies(i).FlagFail
                         obj.Plies(i).failedPly([0.4 0.4 0.15]);
-                        fprintf('Ply %i (Angle = %i deg) FAILED at %.2f %% of given loads!\n',...
-                            i,obj.Plies(i).Angle,(NM(1)/Nxold)*100);
+                        if verbose
+                            fprintf('Ply %i (Angle = %i deg) FAILED at %.2f %% of given loads!\n',...
+                                i,obj.Plies(i).Angle,(NM(1)/Nxold)*100);
+                        end
                         if ~flag_FPF % NEEDS TO BE IMPLEMENTED FOR MORE DETAILED FPF 
 %                             fprintf('Following First Fly Failure, the laminate would fail at %f\n',i);
                             flag_FPF    =   true;
@@ -192,7 +210,14 @@ classdef CLT_Laminate < handle
                 end 
             end
 
-            fprintf('ALL plies failed!\n');
+            if verbose
+                fprintf('ALL plies failed!\n');
+            end
+            
+            if obj.Verbose
+                fprintf('Progressive Failure Analysis Terminated!\n');
+                obj.printLine();
+            end
             
         end
         
@@ -211,9 +236,11 @@ classdef CLT_Laminate < handle
         
         function [varargout] = calculateBuckling(obj,varargin)
             
+            obj.printLineText('AE 553 - Fall 2021 - Guest Lecture Code')
             fprintf('WARNING: Buckling Load for Symmetric Laminate Only!\n');
             fprintf('This is a show demonstration for AE 553!\n');
-            
+            fprintf('No parts of this method were verified and validated!\n');
+            fprintf('Use at your own risk!\n');
             
             
             p               =   inputParser;
@@ -333,10 +360,26 @@ classdef CLT_Laminate < handle
             
             fprintf('\n');
         end
+        
+        function LicenseMessage(obj)
+            obj.printLineText('Classical Lamination Theory');
+            fprintf('Copyright (C) 2021 Antonio Alessandro Deleo\n');
+            fprintf('This program is free software: you can redistribute it and/or modify\n');
+            fprintf('it under the terms of the GNU General Public License as published by\n');
+            fprintf('the Free Software Foundation, either version 3 of the License, or\n');
+            fprintf('any later version.\n');
+            fprintf('This program is distributed in the hope that it will be useful,\n');
+            fprintf('but WITHOUT ANY WARRANTY; without even the implied warranty of\n');
+            fprintf('MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n');
+            fprintf('GNU General Public License for more details.\n');
+            fprintf('You should have received a copy of the GNU General Public License\n');
+            fprintf('along with this program.  If not, see <http://www.gnu.org/licenses/>.\n');
+            obj.printLine();
+            fprintf('\n\n\n');
+            
+        end
 
     end
-    
-    
-    
+
  
 end
