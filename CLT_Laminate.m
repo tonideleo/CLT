@@ -169,7 +169,11 @@ classdef CLT_Laminate < handle
             MCD         =   max(abs([Nx,Ny,Nxy,Mx,My,Mxy]));
             Nxold       =   Nx;
             F           =   [Nx,Ny,Nxy,Mx,My,Mxy]./MCD;
-%             F(F = nan)  =   0;
+            if all(F == 0 | isnan(F))
+                fprintf('Initial Loads are unusable. Aborting...\n');
+                if obj.Verbose; obj.printLine(); end
+                return
+            end
             
             tmax        =   MCD;
             nsteps      =   10000;
@@ -215,7 +219,7 @@ classdef CLT_Laminate < handle
             end
             
             if obj.Verbose
-                fprintf('Progressive Failure Analysis Terminated!\n');
+                fprintf('Progressive Failure Analysis Successfully Terminated!\n');
                 obj.printLine();
             end
             
