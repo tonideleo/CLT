@@ -130,7 +130,7 @@ Note: this method is not fully completed yet, as mostly the rest of the code.
 
 Please feel free to reach out if you have any question or if you would like to have something implemented!
 
-### Antonio Alessandro Deleo
-### Department of Aeronautics & Astronautics
-### University of Washington Seattle
-### a(dot)deleo(at)uw.(edu)
+Antonio Alessandro Deleo  
+Department of Aeronautics & Astronautics  
+University of Washington Seattle  
+a()deleo(at)uw.(edu)  
