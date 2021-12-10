@@ -367,7 +367,9 @@ classdef CLT_Laminate < handle
         
         function LicenseMessage(obj)
             obj.printLineText('Classical Lamination Theory');
-            fprintf('Copyright (C) 2021 Antonio Alessandro Deleo\n');
+            fprintf('Copyright (C) 2021 Antonio Alessandro Deleo (adeleo@uw.edu)\n');
+            fprintf('Department of Aeronautics & Astronautics\n');
+            fprintf('University of Washington, Seattle, WA\n');
             fprintf('This program is free software: you can redistribute it and/or modify\n');
             fprintf('it under the terms of the GNU General Public License as published by\n');
             fprintf('the Free Software Foundation, either version 3 of the License, or\n');
@@ -379,7 +381,7 @@ classdef CLT_Laminate < handle
             fprintf('You should have received a copy of the GNU General Public License\n');
             fprintf('along with this program.  If not, see <http://www.gnu.org/licenses/>.\n');
             obj.printLine();
-            fprintf('\n\n\n');
+            fprintf('\n');
             
         end
 
