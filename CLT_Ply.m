@@ -48,6 +48,9 @@ classdef CLT_Ply < handle
         function calculateStress(obj)
                 obj.Sxy     =   obj.Qbar * (obj.exy + obj.z_MidPlane.* obj.kxy);
                 obj.S12     =   (inv(obj.T))\obj.Sxy;
+                % Here there might be issues with obj.Material which does
+                % not calculate S automatically! Need to double check!
+                obj.Material.calculateS();
                 obj.e12     =   obj.Material.S * obj.S12; %This might be wrong if using PFA
         end
        
@@ -95,7 +98,7 @@ classdef CLT_Ply < handle
             
             T   =   [x^2, y^2, 2*x*y;
                      y^2, x^2, -2*x*y;
-                     -x*y, x^y, x^2 - y^2];
+                     -x*y, x*y, x^2 - y^2];
             
         end
  

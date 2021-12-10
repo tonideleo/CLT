@@ -37,7 +37,7 @@ classdef CLT_Laminate < handle
             
             addOptional(p,'Stack',[]);
             addOptional(p,'Material', @(x) isa(x,'CLT_Material'));
-            addOptional(p,'Thickness',0.15, @(x) x > 0);
+            addOptional(p,'Thickness',0.15);
             addOptional(p,'Symmetric',false,@(x) islogical(x));
             addOptional(p,'RepeatLeft',1, @(x) x > 0);
             addOptional(p,'RepeatRight',1, @(x) x > 0);
